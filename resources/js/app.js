@@ -8,8 +8,13 @@ require('./bootstrap');
 
 window.Vue = require('vue');
 
+window.Vue.prototype.authorize = function (handler) {
+    const { user } = window.App
+    return !!user ? handler(user) : false
+}
+
 Vue.component('flash', require('./components/Flash.vue').default);
-Vue.component('reply', require('./components/Reply.vue').default);
+Vue.component('thread-view', require('./pages/Thread.vue').default);
 
 window.events = new Vue()
 

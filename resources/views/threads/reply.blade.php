@@ -12,9 +12,11 @@
                     </a>
                 </h5>
 
-                <div>
-                    <favorite :reply="{{ $reply }}"></favorite>
-                </div>
+                @if (Auth::check())
+                    <div>
+                        <favorite :reply="{{ $reply }}"></favorite>
+                    </div>
+                @endif
             </div>
             
             said {{ $reply->created_at->diffForHumans() }}
