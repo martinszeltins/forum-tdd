@@ -8,8 +8,12 @@
             </reply>
         </div>
 
+        <paginator
+            :dataSet="dataSet"
+            @change="fetch"
+        />
+
         <new-reply
-            :endpoint="endpoint"
             @created="add">
         </new-reply>
     </div>
@@ -18,41 +22,61 @@
 <script>
     import Reply from './Reply.vue'
     import NewReply from './NewReply.vue'
+    import Collection from '../mixins/Collection.js'
 
     export default {
-        props: ['data'],
-
         components:
         {
             Reply,
             NewReply,
         },
 
+        mixins:
+        [
+            Collection
+        ],
+
         data()
         {
             return {
-                items: this.data,
-                endpoint: location.pathname + '/replies',
+                dataSet: false,
             }
         },
 
         methods:
         {
-            add(reply)
+            url(page)
             {
-                this.items.push(reply)
-                
-                this.$emit('add')
+                if (!page) {
+                    let query = location.search.match(/page=(\d+)/)
+                    
+                    if (query) {
+                        query = query[1]
+                    }
+
+                    page = query ? query : 1
+                }
+
+                return `${location.pathname}/replies?page=${page}`
             },
 
-            remove(index)
+            async fetch(page)
             {
-                this.items.splice(index, 1)
+                const result = await axios.get(this.url(page))
 
-                this.$emit('remove')
-
-                flash('Reply was deleted!')
+                this.refresh(result.data)
             },
+
+            refresh(data)
+            {
+                this.dataSet = data
+                this.items = data.data
+            },
+        },
+
+        created()
+        {
+            this.fetch()
         },
     }
 </script>
