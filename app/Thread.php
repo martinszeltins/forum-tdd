@@ -12,13 +12,11 @@ class Thread extends Model
 
     protected $with = ['creator', 'channel'];
 
+    protected $appends = ['isSubscribedTo'];
+
     protected static function boot()
     {
         parent::boot();
-
-        static::addGlobalScope('replyCount', function ($builder) {
-            $builder->withCount('replies');
-        });
 
         static::deleting(function ($thread) {
             $thread->replies->each->delete();
@@ -58,5 +56,31 @@ class Thread extends Model
     public function replyCount()
     {
         return $this->replies()->count();
+    }
+
+    public function subscribe($userID = null)
+    {
+        $this->subscriptions()->create([
+            'user_id' => $userID ?: auth()->id(),
+        ]);
+    }
+
+    public function unsubscribe($userID = null)
+    {
+        $this->subscriptions()
+             ->where('user_id', $userID ?: auth()->id())
+             ->delete();
+    }
+
+    public function subscriptions()
+    {
+        return $this->hasMany(ThreadSubscription::class);
+    }
+    
+    public function getIsSubscribedToAttribute()
+    {
+        return $this->subscriptions()
+                    ->where('user_id', auth()->id())
+                    ->exists();
     }
 }

@@ -32,7 +32,10 @@ class ThreadTest extends TestCase
     /** @test */
     public function test_a_thread_has_replies()
     {
-        $this->assertInstanceOf('Illuminate\Database\Eloquent\Collection', $this->thread->replies);
+        $this->assertInstanceOf(
+            'Illuminate\Database\Eloquent\Collection',
+            $this->thread->replies
+        );
     }
 
     /** @test */
@@ -58,5 +61,46 @@ class ThreadTest extends TestCase
         $thread = factory('App\Thread')->create();
 
         $this->assertInstanceOf('App\Channel', $thread->channel);
+    }
+
+    /** @test */
+    public function test_a_thread_can_be_subscribed_to()
+    {
+        $thread = factory('App\Thread')->create();
+
+        $thread->subscribe($userID = 1);
+
+        $this->assertEquals(1,
+            $thread->subscriptions()
+                   ->where('user_id', $userID)->count()
+        );
+    }
+
+    /** @test */
+    public function test_a_thread_can_be_unsubscribed_from()
+    {
+        $thread = factory('App\Thread')->create();
+
+        $thread->subscribe($userID = 1);
+
+        $thread->unsubscribe($userID);
+
+        $this->assertCount(0,
+            $thread->subscriptions
+        );
+    }
+
+    /** @test */
+    public function test_it_knows_if_the_authenticated_user_is_subscribed_to_it()
+    {
+        $thread = factory('App\Thread')->create();
+
+        $this->actingAs(factory('App\User')->create());
+
+        $this->assertFalse($thread->isSubscribedTo);
+
+        $thread->subscribe();
+
+        $this->assertTrue($thread->isSubscribedTo);
     }
 }
