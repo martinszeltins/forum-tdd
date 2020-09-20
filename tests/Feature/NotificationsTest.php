@@ -2,18 +2,24 @@
 
 namespace Tests\Feature;
 
-use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Tests\TestCase;
+use Illuminate\Notifications\DatabaseNotification;
+use Illuminate\Foundation\Testing\DatabaseMigrations;
 
 class NotificationsTest extends TestCase
 {
     use DatabaseMigrations;
 
+    public function setUp() : void
+    {
+        parent::setUp();
+
+        $this->be(factory('App\User')->create());
+    }
+
     /** @test */
     public function test_a_notification_is_prepared_when_a_subscribed_thread_receives_a_new_reply_that_is_not_by_the_current_user()
     {
-        $this->be(factory('App\User')->create());
-
         $thread = factory('App\Thread')->create()->subscribe();
 
         $this->assertCount(0, auth()->user()->notifications);
@@ -36,15 +42,11 @@ class NotificationsTest extends TestCase
     /** @test */
     public function test_a_user_can_fetch_their_unread_notifications()
     {
-        $this->be(factory('App\User')->create());
-
-        $thread = factory('App\Thread')->create()->subscribe();
-
-        $thread->addReply([
-            'user_id' => factory('App\User')->create()->id,
-            'body' => 'Some reply',
-        ]);
-
+        factory(DatabaseNotification::class)->create([
+            'notifiable_id' => 1,
+            'read_at' => NULL,
+            ]);
+            
         $user = auth()->user();
 
         $response = $this->getJson("profiles/{$user->name}/notifications/")->json();
