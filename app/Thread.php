@@ -40,7 +40,14 @@ class Thread extends Model
 
     public function addReply($reply)
     {
-        return $this->replies()->create($reply);
+        $reply = $this->replies()->create($reply);
+
+        $this->subscriptions()
+             ->notFor($reply->user_id)
+             ->get()
+             ->each->notify($reply);
+
+        return $reply;
     }
 
     public function channel()
@@ -63,6 +70,8 @@ class Thread extends Model
         $this->subscriptions()->create([
             'user_id' => $userID ?: auth()->id(),
         ]);
+
+        return $this;
     }
 
     public function unsubscribe($userID = null)

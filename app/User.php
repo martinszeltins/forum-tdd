@@ -37,11 +37,17 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    /**
+     * User's threads.
+     */
     public function threads()
     {
         return $this->hasMany(Thread::class)->latest();
     }
 
+    /**
+     * User's activity.
+     */
     public function activity()
     {
         return $this->hasMany(Activity::class);
