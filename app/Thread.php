@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Events\ThreadHasNewReply;
 use Illuminate\Database\Eloquent\Model;
 
 class Thread extends Model
@@ -41,13 +42,18 @@ class Thread extends Model
     public function addReply($reply)
     {
         $reply = $this->replies()->create($reply);
+        
+        $this->notifySubscribers($reply);
 
+        return $reply;
+    }
+
+    public function notifySubscribers($reply)
+    {
         $this->subscriptions()
              ->notFor($reply->user_id)
              ->get()
              ->each->notify($reply);
-
-        return $reply;
     }
 
     public function channel()
@@ -91,5 +97,14 @@ class Thread extends Model
         return $this->subscriptions()
                     ->where('user_id', auth()->id())
                     ->exists();
+    }
+
+    public function hasUpdatesFor($user)
+    {
+        if (!auth()->check()) return true;
+        
+        $key = $user->visitedThreadCacheKey($this);
+
+        return $this->updated_at > cache($key);
     }
 }
