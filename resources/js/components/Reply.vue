@@ -96,9 +96,15 @@
             {
                 this.updateBtn = 'Saving...'
 
-                await axios.patch(`/replies/${this.data.id}`, {
-                    body: this.body,
-                })
+                try {
+                    await axios.patch(`/replies/${this.data.id}`, {
+                        body: this.body,
+                    })
+                } catch (error) {
+                    flash(error.response.data, 'danger')
+                    this.updateBtn = 'Update'
+                    return
+                }
 
                 this.updateBtn = 'Update'
 

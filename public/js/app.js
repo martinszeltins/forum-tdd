@@ -1982,17 +1982,20 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['message'],
   data: function data() {
     return {
       body: '',
+      level: 'success',
       show: false
     };
   },
   methods: {
-    flash: function flash(message) {
-      this.body = message;
+    flash: function flash(data) {
+      this.body = data.message;
+      this.level = data.level;
       this.show = true;
       this.hide();
     },
@@ -2011,8 +2014,8 @@ __webpack_require__.r(__webpack_exports__);
       this.flash(this.message);
     }
 
-    window.events.$on('flash', function (message) {
-      _this2.flash(message);
+    window.events.$on('flash', function (data) {
+      _this2.flash(data);
     });
   }
 });
@@ -2079,29 +2082,41 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       var _this = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
-        var result;
+        var _result;
+
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
-                _context.next = 2;
+                _context.prev = 0;
+                _context.next = 3;
                 return axios.post(_this.endpoint, {
                   body: _this.body
                 });
 
-              case 2:
-                result = _context.sent;
+              case 3:
+                _result = _context.sent;
+                _context.next = 10;
+                break;
+
+              case 6:
+                _context.prev = 6;
+                _context.t0 = _context["catch"](0);
+                flash(_context.t0.response.data, 'danger');
+                return _context.abrupt("return");
+
+              case 10:
                 _this.body = '';
                 flash('Your reply has been posted.');
 
                 _this.$emit('created', result.data);
 
-              case 6:
+              case 13:
               case "end":
                 return _context.stop();
             }
           }
-        }, _callee);
+        }, _callee, null, [[0, 6]]);
       }))();
     }
   },
@@ -2417,22 +2432,34 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             switch (_context2.prev = _context2.next) {
               case 0:
                 _this2.updateBtn = 'Saving...';
-                _context2.next = 3;
+                _context2.prev = 1;
+                _context2.next = 4;
                 return axios.patch("/replies/".concat(_this2.data.id), {
                   body: _this2.body
                 });
 
-              case 3:
+              case 4:
+                _context2.next = 11;
+                break;
+
+              case 6:
+                _context2.prev = 6;
+                _context2.t0 = _context2["catch"](1);
+                flash(_context2.t0.response.data, 'danger');
+                _this2.updateBtn = 'Update';
+                return _context2.abrupt("return");
+
+              case 11:
                 _this2.updateBtn = 'Update';
                 _this2.editing = false;
                 flash('Updated!');
 
-              case 6:
+              case 14:
               case "end":
                 return _context2.stop();
             }
           }
-        }, _callee2);
+        }, _callee2, null, [[1, 6]]);
       }))();
     },
     destroy: function destroy() {
@@ -60854,10 +60881,11 @@ var render = function() {
       directives: [
         { name: "show", rawName: "v-show", value: _vm.show, expression: "show" }
       ],
-      staticClass: "alert alert-success alert-flash",
+      staticClass: "alert alert-flash",
+      class: "alert-" + _vm.level,
       attrs: { role: "alert" }
     },
-    [_c("strong", [_vm._v("Success!")]), _vm._v(" " + _vm._s(_vm.body) + "\n")]
+    [_vm._v("\n\n    " + _vm._s(_vm.body) + "\n")]
   )
 }
 var staticRenderFns = []
@@ -73537,7 +73565,11 @@ Vue.component('user-notifications', __webpack_require__(/*! ./components/UserNot
 window.events = new Vue();
 
 window.flash = function (message) {
-  window.events.$emit('flash', message);
+  var level = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'success';
+  window.events.$emit('flash', {
+    message: message,
+    level: level
+  });
 };
 
 var app = new Vue({

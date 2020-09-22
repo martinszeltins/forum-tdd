@@ -43,9 +43,14 @@
         {
             async addReply()
             {
-                const result = await axios.post(this.endpoint, {
-                    body: this.body
-                })
+                try {
+                    const result = await axios.post(this.endpoint, {
+                        body: this.body
+                    })
+                } catch (error) {
+                    flash(error.response.data, 'danger')
+                    return
+                }
 
                 this.body = ''
                 flash('Your reply has been posted.')
