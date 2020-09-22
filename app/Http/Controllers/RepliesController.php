@@ -24,6 +24,8 @@ class RepliesController extends Controller
 
     public function store(StoreReply $request, $channel, Thread $thread)
     {
+        $this->authorize('create', new Reply);
+
         $reply = $thread->addReply([
             'body' => $request->body,
             'user_id' => auth()->id(),
