@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreReply;
+use App\Http\Requests\UpdateReply;
+use Exception;
 use App\Reply;
 use App\Thread;
-use App\Inspections\Spam;
-use Exception;
+use App\Rules\SpamFree;
 use Illuminate\Http\Request;
 
 class RepliesController extends Controller
@@ -20,18 +22,12 @@ class RepliesController extends Controller
         return $thread->replies()->paginate(10);
     }
 
-    public function store(Request $request, $channel, Thread $thread)
+    public function store(StoreReply $request, $channel, Thread $thread)
     {
-        try {
-            $this->validateReply();
-        
-            $reply = $thread->addReply([
-                'body' => $request->body,
-                'user_id' => auth()->id(),
-            ]);
-        } catch (Exception $exception) {
-            return response('Something went wrong', 422);
-        }
+        $reply = $thread->addReply([
+            'body' => $request->body,
+            'user_id' => auth()->id(),
+        ]);
 
         return $reply->load('owner');
     }
@@ -51,27 +47,8 @@ class RepliesController extends Controller
         return back();
     }
 
-    public function update(Reply $reply)
+    public function update(UpdateReply $request, Reply $reply)
     {
-        $this->authorize('update', $reply);
-
-        try {
-            $validated = $this->validateReply();
-    
-            $reply->update($validated);
-        } catch (Exception $exception) {
-            return response('Something went wrong', 422);
-        }
-    }
-
-    public function validateReply()
-    {
-        $validated = $this->validate(request(), [
-            'body' => 'required',
-        ]);
-        
-        resolve(Spam::class)->detect(request('body'));
-
-        return $validated;
+        $reply->update($request->validated());
     }
 }
