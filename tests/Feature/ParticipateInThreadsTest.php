@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use Exception;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Tests\TestCase;
 
