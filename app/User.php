@@ -81,7 +81,6 @@ class User extends Authenticatable
     {
         return $query->where('name', 'like', "$name%")
                      ->take(3)
-                     ->get()
                      ->pluck('name');
     }
 }

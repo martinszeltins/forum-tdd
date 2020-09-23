@@ -96,6 +96,6 @@ class ThreadsController extends Controller
             $threads->whereChannelId($channel->id);
         }
 
-       return $threads->get();
+       return $threads->paginate(5);
     }
 }
