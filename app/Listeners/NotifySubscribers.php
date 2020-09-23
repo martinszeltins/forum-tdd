@@ -8,11 +8,9 @@ class NotifySubscribers
 {
     public function handle(ThreadReceivedNewReply $event)
     {
-        $thread = $event->reply->thread;
-
-        $thread->subscriptions()
-               ->notFor($event->reply->user_id)
-               ->get()
-               ->each->notify($event->reply);
+        $event->reply->thread->subscriptions()
+              ->notFor($event->reply->user_id)
+              ->get()
+              ->each->notify($event->reply);
     }
 }
