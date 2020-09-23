@@ -29,4 +29,17 @@ class ReplyTest extends TestCase
 
         $this->assertFalse($reply->wasJustPublished());
     }
+
+    /** @test */
+    public function test_it_wraps_mentioned_usernames_in_the_body_within_anchor_tags()
+    {
+        $reply = factory('App\Reply')->create([
+            'body' => 'Hello @Martins',
+        ]);
+        
+        $this->assertEquals(
+            'Hello <a href="/profiles/Martins">@Martins</a>',
+            $reply->body
+        );
+    }
 }
