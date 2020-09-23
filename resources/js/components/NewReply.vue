@@ -44,7 +44,7 @@
             async addReply()
             {
                 try {
-                    const result = await axios.post(this.endpoint, {
+                    var result = await axios.post(this.endpoint, {
                         body: this.body
                     })
                 } catch (error) {
