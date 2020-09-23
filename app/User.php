@@ -3,7 +3,6 @@
 namespace App;
 
 use Carbon\Carbon;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
@@ -13,8 +12,6 @@ class User extends Authenticatable
 
     /**
      * The attributes that are mass assignable.
-     *
-     * @var array
      */
     protected $fillable = [
         'name', 'email', 'password',
@@ -22,8 +19,6 @@ class User extends Authenticatable
 
     /**
      * The attributes that should be hidden for arrays.
-     *
-     * @var array
      */
     protected $hidden = [
         'password', 'remember_token', 'email',
@@ -31,8 +26,6 @@ class User extends Authenticatable
 
     /**
      * The attributes that should be cast to native types.
-     *
-     * @var array
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
@@ -54,11 +47,17 @@ class User extends Authenticatable
         return $this->hasMany(Activity::class);
     }
 
+    /**
+     * Visited Thread's key
+     */
     public function visitedThreadCacheKey($thread)
     {
         return sprintf("users.%s.visits.%s", $this->id, $thread->id);
     }
 
+    /**
+     * User reads a read
+     */
     public function read($thread)
     {
         cache()->forever(
@@ -67,8 +66,22 @@ class User extends Authenticatable
         );
     }
 
+    /**
+     * User's last reply.
+     */
     public function lastReply()
     {
         return $this->hasOne(Reply::class)->latest();
+    }
+    
+    /**
+     * Search user by name
+     */
+    public function scopeSearchByName($query, $name)
+    {
+        return $query->where('name', 'like', "$name%")
+                     ->take(3)
+                     ->get()
+                     ->pluck('name');
     }
 }

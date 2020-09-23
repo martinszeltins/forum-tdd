@@ -3,15 +3,17 @@
         <div v-if="signedIn">
             <div class="col-md-8">
                 <div class="form-group">
-                    <textarea
-                        name="body"
-                        id="body"
-                        class="form-control"
-                        placeholder="Have something to say?"
-                        rows="5"
-                        v-model="body"
-                        required>
-                    </textarea>
+                    <at-ta :members="members" @at="fetchMembers">
+                        <textarea
+                            name="body"
+                            id="body"
+                            class="form-control"
+                            placeholder="Have something to say?"
+                            rows="5"
+                            v-model="body"
+                            required>
+                        </textarea>
+                    </at-ta>
                 </div>
 
                 <button
@@ -30,19 +32,35 @@
 </template>
 
 <script>
+    import debounce from 'debounce'
+    import AtTa from 'vue-at/dist/vue-at-textarea'
+
     export default {
+        components: 
+        {
+            AtTa,
+        },
+
         data()
         {
             return {
                 body: '',
                 endpoint: location.pathname + '/replies',
+                members: [],
             }
         },
 
         methods:
         {
+            async fetchMembers(at)
+            {
+                const result = await axios.get(`/api/users?name=${at}`)
+                this.members = result.data
+            },
+
             async addReply()
             {
+                console.log(this)
                 try {
                     var result = await axios.post(this.endpoint, {
                         body: this.body
@@ -64,6 +82,11 @@
             {
                 return window.App.signedIn
             },
+        },
+
+        created()
+        {
+            this.fetchMembers = debounce(this.fetchMembers, 500)
         },
     }
 </script>

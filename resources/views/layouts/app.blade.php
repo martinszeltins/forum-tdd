@@ -47,6 +47,15 @@
         [v-cloak] {
             display: none;
         }
+
+        .atwho-view {
+            background-color: hsl(0deg 0% 100% / 85%) !important;
+            backdrop-filter: blur(5px) !important;
+        }
+
+        .atwho-li {
+            height: 38px !important;
+        }
     </style>
 </head>
 <body>
