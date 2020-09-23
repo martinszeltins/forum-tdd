@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 Auth::routes();
@@ -86,3 +87,12 @@ Route::delete('profiles/{user:name}/notifications/{notification}',      'UserNot
 */
 
 Route::get('api/users',                                                 'Api\UsersController@index');
+
+
+/*
+|--------------------------------------------------------------------------
+| User avatars
+|--------------------------------------------------------------------------
+*/
+
+Route::post('api/users/{user}/avatar',                                   'Api\UserAvatarController@store');

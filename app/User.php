@@ -13,9 +13,7 @@ class User extends Authenticatable
     /**
      * The attributes that are mass assignable.
      */
-    protected $fillable = [
-        'name', 'email', 'password',
-    ];
+    protected $guarded = [];
 
     /**
      * The attributes that should be hidden for arrays.
@@ -82,5 +80,15 @@ class User extends Authenticatable
         return $query->where('name', 'like', "$name%")
                      ->take(3)
                      ->pluck('name');
+    }
+    
+    /**
+     * Save user's avatar
+     */
+    public function saveAvatar($file)
+    {
+        $this->update([
+            'avatar_path' => $file->store('avatars', 'public')
+        ]);
     }
 }
