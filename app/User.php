@@ -91,4 +91,12 @@ class User extends Authenticatable
             'avatar_path' => $file->store('avatars', 'public')
         ]);
     }
+
+    /**
+     * User's avatar
+     */
+    public function avatar()
+    {
+        return asset('storage/' . $this->avatar_path ?: 'storage/avatars/default.jpg');
+    }
 }

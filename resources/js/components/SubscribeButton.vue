@@ -1,7 +1,7 @@
 <template>
     <button
         @click="subscribe"
-        class="btn"
+        class="btn m-l-20 m-b-20"
         :class="active ? 'btn-primary' : 'btn-secondary'">
         Subscribe
     </button>

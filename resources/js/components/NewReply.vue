@@ -1,7 +1,7 @@
 <template>
     <div>
         <div v-if="signedIn">
-            <div class="col-md-8">
+            <div class="m-40-20">
                 <div class="form-group">
                     <at-ta :members="members" @at="fetchMembers">
                         <textarea
@@ -25,7 +25,7 @@
             </div>
         </div>
 
-        <p class="text-center">Please <a href="/login">
+        <p v-if="!signedIn" class="text-center">Please <a href="/login">
             sign in</a> to participate in this discussion.
         </p>
     </div>

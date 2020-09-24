@@ -47,7 +47,7 @@
             {
                 return [
                     'btn',
-                    this.active ? 'btn-primary' : 'btn-secondary'
+                    this.active ? 'btn-danger' : 'btn-light-2'
                 ]
             },
 

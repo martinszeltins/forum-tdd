@@ -43,16 +43,16 @@
             <div v-else v-html="body"></div>
         </div>
 
-        <div class="panel-footer level" v-if="canUpdate">
+        <div class="panel-footer level margin-20" v-if="canUpdate">
             <button
                 @click="openEditor"
-                class="btn btn-secondary btn-xs mr-1">
+                class="btn btn-secondary btn-sm mr-1">
                 Edit
             </button>
 
             <button
                 @click="destroy"
-                class="btn btn-danger btn-xs mr-1"
+                class="btn btn-danger btn-sm mr-1"
                 v-text="deleteBtn">
             </button>
         </div>

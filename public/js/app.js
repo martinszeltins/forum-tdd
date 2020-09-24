@@ -1952,7 +1952,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   computed: {
     classes: function classes() {
-      return ['btn', this.active ? 'btn-primary' : 'btn-secondary'];
+      return ['btn', this.active ? 'btn-danger' : 'btn-light-2'];
     },
     endpoint: function endpoint() {
       return "/replies/".concat(this.reply.id, "/favorites");
@@ -61194,7 +61194,7 @@ var render = function() {
   return _c("div", [
     _vm.signedIn
       ? _c("div", [
-          _c("div", { staticClass: "col-md-8" }, [
+          _c("div", { staticClass: "m-40-20" }, [
             _c(
               "div",
               { staticClass: "form-group" },
@@ -61252,21 +61252,16 @@ var render = function() {
         ])
       : _vm._e(),
     _vm._v(" "),
-    _vm._m(0)
+    !_vm.signedIn
+      ? _c("p", { staticClass: "text-center" }, [
+          _vm._v("Please "),
+          _c("a", { attrs: { href: "/login" } }, [_vm._v("\n        sign in")]),
+          _vm._v(" to participate in this discussion.\n    ")
+        ])
+      : _vm._e()
   ])
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("p", { staticClass: "text-center" }, [
-      _vm._v("Please "),
-      _c("a", { attrs: { href: "/login" } }, [_vm._v("\n        sign in")]),
-      _vm._v(" to participate in this discussion.\n    ")
-    ])
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 
 
@@ -61513,18 +61508,18 @@ var render = function() {
       ]),
       _vm._v(" "),
       _vm.canUpdate
-        ? _c("div", { staticClass: "panel-footer level" }, [
+        ? _c("div", { staticClass: "panel-footer level margin-20" }, [
             _c(
               "button",
               {
-                staticClass: "btn btn-secondary btn-xs mr-1",
+                staticClass: "btn btn-secondary btn-sm mr-1",
                 on: { click: _vm.openEditor }
               },
               [_vm._v("\n            Edit\n        ")]
             ),
             _vm._v(" "),
             _c("button", {
-              staticClass: "btn btn-danger btn-xs mr-1",
+              staticClass: "btn btn-danger btn-sm mr-1",
               domProps: { textContent: _vm._s(_vm.deleteBtn) },
               on: { click: _vm.destroy }
             })
@@ -61558,7 +61553,7 @@ var render = function() {
   return _c(
     "button",
     {
-      staticClass: "btn",
+      staticClass: "btn m-l-20 m-b-20",
       class: _vm.active ? "btn-primary" : "btn-secondary",
       on: { click: _vm.subscribe }
     },
