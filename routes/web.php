@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * Finished lesson 70
+ */
+
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
