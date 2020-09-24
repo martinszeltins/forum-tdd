@@ -10949,7 +10949,8 @@ body {
   line-height: 1.6;
   color: #212529;
   text-align: left;
-  background-color: #f8fafc;
+  /* background-color: #f8fafc; */
+  background-color: #000;
 }
 
 [tabindex="-1"]:focus:not(:focus-visible) {
@@ -11492,7 +11493,7 @@ pre code {
   .container-md,
   .container-sm,
   .container {
-    max-width: 100%;
+    max-width: 95%;
   }
 }
 

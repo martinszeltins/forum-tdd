@@ -36,5 +36,7 @@
 
         <flash message="{{ session('flash') }}"></flash>
     </div>
+
+    <script src="http://localhost:35729/livereload.js?snipver=1"></script>
 </body>
 </html>
