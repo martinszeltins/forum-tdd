@@ -17,7 +17,5 @@ class UserAvatarController extends Controller
         auth()->user()->saveAvatar(
             request()->file('avatar')
         );
-
-        return back();
     }
 }

@@ -14,7 +14,7 @@
                         <div class="level">
                             <img
                                 class="mr-2"
-                                src="{{ $thread->creator->avatar() }}"
+                                src="{{ $thread->creator->avatar_path }}"
                                 width="25"
                                 height="25"
                             />
