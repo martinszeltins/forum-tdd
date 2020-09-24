@@ -21850,3 +21850,10 @@ body {
   margin: 40px 20px;
 }
 
+.card-body {
+  padding: 0;
+}
+
+.card-body .body {
+  padding: 20px 20px;
+}

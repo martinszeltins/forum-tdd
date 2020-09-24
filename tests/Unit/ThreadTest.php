@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Notifications\ThreadWasUpdated;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Illuminate\Support\Facades\Redis;
 
 class ThreadTest extends TestCase
 {
@@ -139,5 +140,21 @@ class ThreadTest extends TestCase
         $user->read($thread);
 
         $this->assertFalse($thread->hasUpdatesFor($user));
+    }
+
+    /** @test */
+    public function test_a_thread_records_each_visit()
+    {
+        $thread = factory('App\Thread')->make(['id' => 1]);
+
+        $thread->resetVisits();
+
+        $thread->recordVisit();
+
+        $this->assertEquals(1, $thread->visits());
+
+        $thread->recordVisit();
+
+        $this->assertEquals(2, $thread->visits());
     }
 }
