@@ -101,3 +101,12 @@ Route::get('api/users',                                                 'Api\Use
 */
 
 Route::post('api/users/{user}/avatar',                                   'Api\UserAvatarController@store');
+
+
+/*
+|--------------------------------------------------------------------------
+| Registration confirmation
+|--------------------------------------------------------------------------
+*/
+
+Route::get('/register/confirm',                                         'Api\RegisterConfirmationController@index');

@@ -27,6 +27,7 @@ class User extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'confirmed' => 'boolean',
     ];
 
     /**
@@ -100,5 +101,15 @@ class User extends Authenticatable
         if (!$avatar) return asset('storage/avatars/default.png');
 
         return asset('storage/' . $avatar);
+    }
+
+    /**
+     * Confirm the user
+     */
+    public function confirm()
+    {
+        $this->confirmed = true;
+
+        $this->save();
     }
 }
