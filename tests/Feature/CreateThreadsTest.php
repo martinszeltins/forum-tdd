@@ -16,12 +16,12 @@ class CreateThreadsTest extends TestCase
         $this->get('/threads/create')
              ->assertRedirect('/login');
 
-        $this->post('/threads')
+        $this->post(route('threads'))
              ->assertRedirect('/login');
     }
 
     /** @test */
-    public function test_an_authenticated_user_can_create_new_forum_threads()
+    public function test_a_user_can_create_new_forum_threads()
     {
         $this->withoutExceptionHandling();
 
@@ -68,7 +68,7 @@ class CreateThreadsTest extends TestCase
 
         $thread = factory('App\Thread')->make($overrides);
 
-        return $this->post('/threads', $thread->toArray());
+        return $this->post(route('threads'), $thread->toArray());
     }
 
     /** @test */
@@ -112,10 +112,16 @@ class CreateThreadsTest extends TestCase
     }
 
     /** @test */
-    public function test_authenticated_users_must_first_confirm_their_email_address_before_creating_threads()
+    public function test_new_users_must_first_confirm_their_email_address_before_creating_threads()
     {
-        $this->publishThread()
-             ->assertRedirect('/threads')
+        $user = factory('App\User')->states('unconfirmed')->create();
+
+        $this->actingAs($user);
+
+        $thread = factory('App\Thread')->make();
+
+        $this->post(route('threads'), $thread->toArray())
+             ->assertRedirect(route('threads'))
              ->assertSessionHas('flash', 'You must first confirm you email address');
     }
 }

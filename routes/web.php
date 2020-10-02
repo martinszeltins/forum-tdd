@@ -25,7 +25,7 @@ Route::get('home',                                                      'HomeCon
 |--------------------------------------------------------------------------
 */
 
-Route::get('threads',                                                   'ThreadsController@index');
+Route::get('threads',                                                   'ThreadsController@index')->name('threads');
 Route::get('threads/create',                                            'ThreadsController@create');
 Route::get('threads/{channel:slug}',                                    'ThreadsController@index');
 Route::get('threads/{channel:slug}/{thread}',                           'ThreadsController@show');
@@ -109,4 +109,4 @@ Route::post('api/users/{user}/avatar',                                   'Api\Us
 |--------------------------------------------------------------------------
 */
 
-Route::get('/register/confirm',                                         'Api\RegisterConfirmationController@index');
+Route::get('/register/confirm',                                         'Api\RegisterConfirmationController@index')->name('register.confirm');
