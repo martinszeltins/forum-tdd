@@ -3,6 +3,7 @@
 namespace App;
 
 use App\Visits;
+use Illuminate\Support\Str;
 use App\Events\ThreadReceivedNewReply;
 use Illuminate\Database\Eloquent\Model;
 
@@ -143,5 +144,35 @@ class Thread extends Model
     public function visits()
     {
         return new Visits($this);
+    }
+
+    /**
+     * Slugify the thread title
+     */
+    public function setSlugAttribute($value)
+    {
+        $slug = Str::slug($value);
+
+        if (static::whereSlug($slug)->exists()) {
+            $slug = $this->incrementSlug($slug);
+        };
+
+        $this->attribute['slug'] = $slug;
+    }
+
+    /**
+     * Increments the slug
+     */
+    public function incrementSlug($slug)
+    {
+        $max = static::whereTitle($this->title)->latest('id')->value('slug');
+
+        if (is_numeric($max[-1])) {
+            return preg_replace_callback('/(\d+)$/', function ($matches) {
+                return $matches[1] + 1;
+            }, $max);
+        }
+
+        return "{$slug}-2";
     }
 }

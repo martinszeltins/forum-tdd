@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Activity;
+use App\Thread;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 
@@ -123,5 +124,20 @@ class CreateThreadsTest extends TestCase
         $this->post(route('threads'), $thread->toArray())
              ->assertRedirect(route('threads'))
              ->assertSessionHas('flash', 'You must first confirm you email address');
+    }
+
+    /** @test */
+    public function test_a_thread_requires_a_unique_slug()
+    {
+        $this->actingAs(factory('App\User')->create());
+
+        $thread = factory('App\Thread')->create([
+            'title' => 'Title',
+            'slug' => 'title',
+        ]);
+
+        $this->post(route('threads'), $thread->toArray());
+
+        $this->assertTrue(Thread::whereSlug('title-2')->exists());
     }
 }
