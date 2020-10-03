@@ -24,12 +24,12 @@ class ThreadTest extends TestCase
     }
 
     /** @test */
-    public function test_a_thread_can_make_a_string_path()
+    public function test_a_thread_has_a_path()
     {
         $thread = factory('App\Thread')->create();
 
         $this->assertEquals(
-            "/threads/{$thread->channel->slug}/{$thread->id}",
+            "/threads/{$thread->channel->slug}/{$thread->slug}",
             $thread->path()
         );
     }
@@ -154,9 +154,5 @@ class ThreadTest extends TestCase
         $thread->visits()->record();
 
         $this->assertEquals(1, $thread->visits()->count());
-
-        // $thread->recordVisit();
-
-        // $this->assertEquals(2, $thread->visits());
     }
 }

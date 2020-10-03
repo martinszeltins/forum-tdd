@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Thread;
 use App\Channel;
 use App\Trending;
+use Illuminate\Support\Str;
 use App\Filters\ThreadFilters;
 use App\Http\Requests\StoreThread;
 
@@ -51,6 +52,7 @@ class ThreadsController extends Controller
             'title' => $request->title,
             'channel_id' => $request->channel_id,
             'body' => $request->body,
+            'slug' => Str::slug($request->title),
         ]);
 
         return redirect($thread->path())->with(

@@ -28,8 +28,8 @@ Route::get('home',                                                      'HomeCon
 Route::get('threads',                                                   'ThreadsController@index')->name('threads');
 Route::get('threads/create',                                            'ThreadsController@create');
 Route::get('threads/{channel:slug}',                                    'ThreadsController@index');
-Route::get('threads/{channel:slug}/{thread}',                           'ThreadsController@show');
-Route::delete('threads/{channel:slug}/{thread}',                        'ThreadsController@destroy');
+Route::get('threads/{channel:slug}/{thread:slug}',                      'ThreadsController@show');
+Route::delete('threads/{channel:slug}/{thread:slug}',                   'ThreadsController@destroy');
 Route::post('threads',                                                  'ThreadsController@store');
 
 
