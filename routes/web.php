@@ -109,4 +109,4 @@ Route::post('api/users/{user}/avatar',                                   'Api\Us
 |--------------------------------------------------------------------------
 */
 
-Route::get('/register/confirm',                                         'Api\RegisterConfirmationController@index')->name('register.confirm');
+Route::get('/register/confirm',                                         'Auth\RegisterConfirmationController@index')->name('register.confirm');
