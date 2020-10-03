@@ -109,4 +109,13 @@ Route::post('api/users/{user}/avatar',                                   'Api\Us
 |--------------------------------------------------------------------------
 */
 
-Route::get('/register/confirm',                                         'Auth\RegisterConfirmationController@index')->name('register.confirm');
+Route::get('register/confirm',                                          'Auth\RegisterConfirmationController@index')->name('register.confirm');
+
+
+/*
+|--------------------------------------------------------------------------
+| Best replies
+|--------------------------------------------------------------------------
+*/
+
+Route::post('replies/{reply}/best',                                     'BestRepliesController@store')->name('best-replies.store');

@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Reply;
 use App\Visits;
 use Illuminate\Support\Str;
 use App\Events\ThreadReceivedNewReply;
@@ -162,5 +163,15 @@ class Thread extends Model
         $slug = "{$slug}-" . $this->id;
 
         $this->attribute['slug'] = $slug;
+    }
+
+    /**
+     * Mark best reply for thread
+     */
+    public function markBestReply(Reply $reply)
+    {
+        $this->best_reply_id = $reply->id;
+
+        $this->save();
     }
 }
