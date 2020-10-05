@@ -7,15 +7,15 @@
         <div class="card-header">
             <div class="level">
                 <h5 class="flex">
-                    <a :href="'/profiles/' + data.owner.name">
-                        {{ data.owner.name}}
+                    <a :href="'/profiles/' + reply.owner.name">
+                        {{ reply.owner.name}}
                     </a>
 
                     said {{ ago }}
                 </h5>
 
                 <div v-if="signedIn">
-                    <favorite :reply="data"></favorite>
+                    <favorite :reply="reply"></favorite>
                 </div>
             </div>
         </div>
@@ -47,8 +47,11 @@
             <div v-else v-html="body"></div>
         </div>
 
-        <div class="panel-footer level margin-20">
-            <div v-if="authorize('updateReply', reply)">
+        <div
+            v-if="authorize('owns', reply) || authorize('owns', reply.thread)"
+            class="panel-footer level margin-20">
+
+            <div v-if="authorize('owns', reply)">
                 <button
                     @click="openEditor"
                     class="btn btn-secondary btn-sm mr-1">
@@ -63,7 +66,7 @@
             </div>
             
             <button
-                v-if="!isBest"
+                v-if="authorize('owns', reply.thread)"
                 @click="markBestReply"
                 class="btn btn-secondary btn-sm ml-a">
                 Best reply?
@@ -77,7 +80,7 @@
     import moment from 'moment'
 
     export default {
-        props: ['data'],
+        props: ['reply'],
 
         components:
         {
@@ -88,12 +91,11 @@
         {
             return {
                 editing: false,
-                id: this.data.id,
-                body: this.data.body,
+                id: this.reply.id,
+                body: this.reply.body,
                 updateBtn: 'Update',
                 deleteBtn: 'Delete',
-                isBest: this.data.isBest,
-                reply: this.data,
+                isBest: this.reply.isBest,
             }
         },
 
@@ -101,9 +103,9 @@
         {
             markBestReply()
             {
-                axios.post(`/replies/${this.data.id}/best`)
+                axios.post(`/replies/${this.reply.id}/best`)
 
-                window.events.$emit('best-reply-selected', this.data.id)
+                window.events.$emit('best-reply-selected', this.reply.id)
             },
 
             async openEditor()
@@ -119,7 +121,7 @@
                 this.updateBtn = 'Saving...'
 
                 try {
-                    await axios.patch(`/replies/${this.data.id}`, {
+                    await axios.patch(`/replies/${this.reply.id}`, {
                         body: this.body,
                     })
                 } catch (error) {
@@ -139,9 +141,9 @@
             {
                 this.deleteBtn = 'Deleting...'
 
-                await axios.delete(`/replies/${this.data.id}`)
+                await axios.delete(`/replies/${this.reply.id}`)
 
-                this.$emit('deleted', this.data.id)
+                this.$emit('deleted', this.reply.id)
 
                 this.deleteBtn = 'Delete'
             },
@@ -151,7 +153,7 @@
         {
             ago()
             {
-                return moment(this.data.created_at).fromNow()
+                return moment(this.reply.created_at).fromNow()
             },
         },
 

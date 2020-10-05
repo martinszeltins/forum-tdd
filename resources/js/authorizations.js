@@ -1,10 +1,10 @@
 let user = window.ApplicationCache.user;
 
 let authorizations = {
-    updateReply(reply)
+    owns(model, prop = 'user_id')
     {
-        return reply.user_d === user.id
-    }
+        return model[prop] === user.id
+    },
 }
 
 export default authorizations

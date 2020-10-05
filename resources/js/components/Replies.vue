@@ -2,7 +2,7 @@
     <div>
         <div v-for="(reply, index) in items">
             <reply
-                :data="reply"
+                :reply="reply"
                 :key="reply.id"
                 @deleted="remove(index)">
             </reply>
