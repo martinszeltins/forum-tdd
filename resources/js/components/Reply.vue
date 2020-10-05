@@ -92,7 +92,7 @@
                 body: this.data.body,
                 updateBtn: 'Update',
                 deleteBtn: 'Delete',
-                isBest: false,
+                isBest: this.data.isBest,
                 reply: this.data,
             }
         },
@@ -101,7 +101,9 @@
         {
             markBestReply()
             {
-                this.isBest = true
+                axios.post(`/replies/${this.data.id}/best`)
+
+                window.events.$emit('best-reply-selected', this.data.id)
             },
 
             async openEditor()
@@ -151,6 +153,13 @@
             {
                 return moment(this.data.created_at).fromNow()
             },
+        },
+
+        created()
+        {
+            window.events.$on('best-reply-selected', id => {
+                this.isBest = (id === this.id)
+            })
         },
     }
 </script>
