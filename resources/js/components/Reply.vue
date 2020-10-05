@@ -1,5 +1,9 @@
 <template>
-    <div :id="'reply-' + id" class="card m-3">
+    <div
+        :id="'reply-' + id"
+        class="card m-3"
+        :class="isBest ? 'panel-success' : 'panel-default'">
+
         <div class="card-header">
             <div class="level">
                 <h5 class="flex">
@@ -43,17 +47,26 @@
             <div v-else v-html="body"></div>
         </div>
 
-        <div class="panel-footer level margin-20" v-if="canUpdate">
-            <button
-                @click="openEditor"
-                class="btn btn-secondary btn-sm mr-1">
-                Edit
-            </button>
+        <div class="panel-footer level margin-20">
+            <div v-if="canUpdate">
+                <button
+                    @click="openEditor"
+                    class="btn btn-secondary btn-sm mr-1">
+                    Edit
+                </button>
 
+                <button
+                    @click="destroy"
+                    class="btn btn-danger btn-sm mr-1"
+                    v-text="deleteBtn">
+                </button>
+            </div>
+            
             <button
-                @click="destroy"
-                class="btn btn-danger btn-sm mr-1"
-                v-text="deleteBtn">
+                v-if="!isBest"
+                @click="markBestReply"
+                class="btn btn-secondary btn-sm ml-a">
+                Best reply?
             </button>
         </div>
     </div>
@@ -79,11 +92,17 @@
                 body: this.data.body,
                 updateBtn: 'Update',
                 deleteBtn: 'Delete',
+                isBest: false,
             }
         },
 
         methods:
         {
+            markBestReply()
+            {
+                this.isBest = true
+            },
+
             async openEditor()
             {
                 this.editing = !this.editing
