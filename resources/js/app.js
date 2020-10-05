@@ -8,10 +8,19 @@ require('./bootstrap');
 
 window.Vue = require('vue');
 
-window.Vue.prototype.authorize = function (handler) {
-    const { user } = window.App
-    return !!user ? handler(user) : false
+let authorizations = require('./authorizations')
+
+window.Vue.prototype.authorize = function (...params) {
+    if (! window.ApplicationCache.singedIn) return false
+
+    if (typeof params[0] === 'string') {
+        return authorizations[params[0]](params[1])
+    }
+
+    return params[0](window.ApplicationCache.user)
 }
+
+Vue.prototype.signedIn = window.App.signedIn
 
 Vue.component('flash', require('./components/Flash.vue').default);
 Vue.component('thread-view', require('./pages/Thread.vue').default);

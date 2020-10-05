@@ -76,14 +76,6 @@
             },
         },
 
-        computed:
-        {
-            signedIn()
-            {
-                return window.App.signedIn
-            },
-        },
-
         created()
         {
             this.fetchMembers = debounce(this.fetchMembers, 500)

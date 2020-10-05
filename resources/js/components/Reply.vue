@@ -48,7 +48,7 @@
         </div>
 
         <div class="panel-footer level margin-20">
-            <div v-if="canUpdate">
+            <div v-if="authorize('updateReply', reply)">
                 <button
                     @click="openEditor"
                     class="btn btn-secondary btn-sm mr-1">
@@ -93,6 +93,7 @@
                 updateBtn: 'Update',
                 deleteBtn: 'Delete',
                 isBest: false,
+                reply: this.data,
             }
         },
 
@@ -149,16 +150,6 @@
             ago()
             {
                 return moment(this.data.created_at).fromNow()
-            },
-
-            signedIn()
-            {
-                return window.App.signedIn
-            },
-
-            canUpdate()
-            {
-                return this.authorize((user) => this.data.user_id === window.App.user.id)
             },
         },
     }
