@@ -83,6 +83,11 @@ class ThreadsController extends Controller
         ]);
     }
 
+    public function update($channel, Thread $thread)
+    {
+        
+    }
+
     /**
      * Remove the specified resource from storage.
      */

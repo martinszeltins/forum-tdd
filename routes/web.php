@@ -31,7 +31,7 @@ Route::get('threads/{channel:slug}',                                    'Threads
 Route::get('threads/{channel:slug}/{thread:slug}',                      'ThreadsController@show');
 Route::delete('threads/{channel:slug}/{thread:slug}',                   'ThreadsController@destroy');
 Route::post('threads',                                                  'ThreadsController@store');
-
+Route::patch('threads/{channel:slug}/{thread:slug}',                    'ThreadsController@update')->name('threads.update');
 
 /*
 |--------------------------------------------------------------------------
@@ -119,3 +119,12 @@ Route::get('register/confirm',                                          'Auth\Re
 */
 
 Route::post('replies/{reply}/best',                                     'BestRepliesController@store')->name('best-replies.store');
+
+
+/*
+|--------------------------------------------------------------------------
+| Lock threads
+|--------------------------------------------------------------------------
+*/
+
+Route::post('locked-threads/{thread}',                                  'LockedThreadsController@store')->name('locked-threads.store');
