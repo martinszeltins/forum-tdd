@@ -2,8 +2,7 @@
 
 @section('content')
 <thread-view
-    :data-replies-count="{{ $thread->replies_count }}"
-    :data-locked="{{ $thread->locked }}"
+    :thread="{{ $thread }}"
     inline-template>
 
     <div class="container">
@@ -68,9 +67,9 @@
 
                         <button
                             v-if="authorize('isAdmin') && !locked"
-                            @click="locked = true"
+                            @click="toggleLock"
                             class="btn btn-default">
-                            Lock
+                            {{ locked ? 'Unlock' : 'Lock' }}
                         </button>
                     </div>
                 </div>

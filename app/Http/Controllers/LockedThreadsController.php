@@ -24,4 +24,12 @@ class LockedThreadsController extends Controller
     {
         $thread->lock();
     }
+
+    /**
+     * Unlock the thread.
+     */
+    public function destroy(Thread $thread)
+    {
+        $thread->unlock();
+    }
 }

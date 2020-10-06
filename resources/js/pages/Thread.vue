@@ -3,7 +3,7 @@
     import SubscribeButton from '../components/SubscribeButton.vue'
 
     export default {
-        props: ['dataRepliesCount', 'dataLocked'],
+        props: ['thread'],
 
         components:
         {
@@ -14,9 +14,21 @@
         data()
         {
             return {
-                repliesCount: this.dataRepliesCount,
-                locked: this.dataLocked,
+                repliesCount: this.thread.replies_count,
+                locked: this.thread.locked,
             }
+        },
+
+        methods:
+        {
+            toggleLock()
+            {
+                let method = this.locked ? 'delete' : 'post'
+                
+                this.locked = !this.locked
+
+                axios[method](`/locked-threads/${this.thread.slug}`)
+            },
         },
     }
 </script>

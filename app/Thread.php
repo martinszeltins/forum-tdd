@@ -19,6 +19,10 @@ class Thread extends Model
 
     protected $appends = ['isSubscribedTo'];
 
+    protected $casts = [
+        'locked' => 'boolean'
+    ];
+
     protected static function boot()
     {
         parent::boot();
@@ -186,5 +190,13 @@ class Thread extends Model
     public function lock()
     {
         $this->update(['locked' => true]);
+    }
+
+    /**
+     * Unlock thread
+     */
+    public function unlock()
+    {
+        $this->update(['locked' => false]);
     }
 }
