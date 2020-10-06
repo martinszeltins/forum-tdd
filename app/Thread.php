@@ -6,6 +6,7 @@ use App\Reply;
 use App\Visits;
 use Illuminate\Support\Str;
 use App\Events\ThreadReceivedNewReply;
+use Exception;
 use Illuminate\Database\Eloquent\Model;
 
 class Thread extends Model
@@ -62,6 +63,10 @@ class Thread extends Model
      */
     public function addReply($reply)
     {
+        if ($this->locked) {
+            throw new Exception('Thread is locked');
+        }
+
         $reply = $this->replies()->create($reply);
 
         event(new ThreadReceivedNewReply($reply));
@@ -173,5 +178,13 @@ class Thread extends Model
         $this->best_reply_id = $reply->id;
 
         $this->save();
+    }
+
+    /**
+     * Lock thread
+     */
+    public function lock()
+    {
+        $this->update(['locked' => true]);
     }
 }

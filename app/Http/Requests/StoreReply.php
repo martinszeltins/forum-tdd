@@ -15,6 +15,7 @@ class StoreReply extends FormRequest
     public function authorize()
     {
         return true;
+        // $this->authorize('create', new Reply);
     }
 
     /**

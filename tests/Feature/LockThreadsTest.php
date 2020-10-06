@@ -20,7 +20,7 @@ class LockThreadsTest extends TestCase
 
         $this->post($thread->path() . '/replies', [
             'body' => 'Body',
-            'user_id' => factory('App\User')->create()->id(),
+            'user_id' => auth()->id(),
         ])->assertStatus(422);
     }
 }

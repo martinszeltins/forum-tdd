@@ -24,6 +24,7 @@ class CreateThreadsTable extends Migration
             $table->integer('visits');
             $table->integer('best_reply_id')->nullable();
             $table->timestamps();
+            $table->boolean('locked')->default(false);
 
             $table->foreign('best_reply_id')
                   ->references('id')
