@@ -5,6 +5,11 @@ let authorizations = {
     {
         return model[prop] === user.id
     },
+
+    isAdmin()
+    {
+        return ['JohnDoe'].includes(user.name)
+    },
 }
 
 export default authorizations

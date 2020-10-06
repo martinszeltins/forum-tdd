@@ -13,7 +13,12 @@
             @change="fetch"
         />
 
+        <p v-if="$parent.locked">
+            This thread has been locked.
+        </p>
+
         <new-reply
+            v-if="!$parent.locked"
             @created="add">
         </new-reply>
     </div>
