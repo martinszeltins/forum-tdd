@@ -8,6 +8,8 @@ use App\Trending;
 use Illuminate\Support\Str;
 use App\Filters\ThreadFilters;
 use App\Http\Requests\StoreThread;
+use Exception;
+use Illuminate\Support\Facades\Http;
 
 class ThreadsController extends Controller
 {
@@ -54,6 +56,16 @@ class ThreadsController extends Controller
             'body' => $request->body,
             'slug' => $request->title,
         ]);
+
+        $response = Http::asForm()->post('https://www.google.com/recaptcha/api/siteverify', [
+            'secret' => config('services.recaptcha.secret'),
+            'response' => $request->input('g-recaptcha-response'),
+            'remoteip' => $_SERVER['REMOTE_ADDR'],
+        ]);
+
+        if (! $response->json()['success']) {
+            throw new Exception('Recaptcha failed... :(');
+        }
 
         if (request()->wantsJson()) {
             return response($thread, 201);

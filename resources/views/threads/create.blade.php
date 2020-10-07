@@ -1,5 +1,15 @@
 @extends('layouts.app')
 
+@section('head')
+     <script src="https://www.google.com/recaptcha/api.js"></script>
+
+    <script>
+        function onSubmit(token) {
+            document.getElementById("demo-form").submit();
+        }
+    </script>
+@endsection
+
 @section('content')
 <div class="container">
     <div class="row justify-content-center">
@@ -56,6 +66,14 @@
                                 rows="8">{{ old('body') }}</textarea>
                         </div>
 
+                        <!-- ReCapthca -->
+                        <button
+                            class="g-recaptcha" 
+                            data-sitekey="reCAPTCHA_site_key" 
+                            data-callback='onSubmit' 
+                            data-action='submit'>
+                            Submit
+                        </button>
 
                         <!-- publish -->
                         <div class="form-group">
