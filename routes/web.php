@@ -29,6 +29,7 @@ Route::get('threads',                                                   'Threads
 Route::get('threads/create',                                            'ThreadsController@create');
 Route::get('threads/{channel:slug}',                                    'ThreadsController@index');
 Route::get('threads/{channel:slug}/{thread:slug}',                      'ThreadsController@show');
+Route::patch('threads/{channel:slug}/{thread:slug}',                    'ThreadsController@update');
 Route::delete('threads/{channel:slug}/{thread:slug}',                   'ThreadsController@destroy');
 Route::post('threads',                                                  'ThreadsController@store');
 Route::patch('threads/{channel:slug}/{thread:slug}',                    'ThreadsController@update')->name('threads.update');

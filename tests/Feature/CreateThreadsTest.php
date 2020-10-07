@@ -164,4 +164,22 @@ class CreateThreadsTest extends TestCase
         $this->publishThread(['g-recaptcha-response' => 'test'])
              ->assertSessionHasErrors('g-recaptcha-response');
     }
+
+    /** @test */
+    public function test_a_thread_can_be_updated()
+    {
+        $this->actingAs(factory('App\User')->create());
+
+        $thread = factory('App\Thread')->create([
+            'user_id' => auth()->id(),
+        ]);
+
+        $this->patchJson($thread->path(), [
+            'title' => 'Changed',
+            'body' => 'Changed body.',
+        ]);
+
+        $this->assertEquals('Changed', $thread->fresh()->title);
+        $this->assertEquals('Changed body.', $thread->fresh()->body);
+    }
 }
