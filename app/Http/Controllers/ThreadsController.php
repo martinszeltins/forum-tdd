@@ -5,11 +5,9 @@ namespace App\Http\Controllers;
 use App\Thread;
 use App\Channel;
 use App\Trending;
-use Illuminate\Support\Str;
 use App\Filters\ThreadFilters;
 use App\Http\Requests\StoreThread;
-use Exception;
-use Illuminate\Support\Facades\Http;
+use App\Rules\Recaptcha;
 
 class ThreadsController extends Controller
 {
@@ -47,7 +45,7 @@ class ThreadsController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreThread $request)
+    public function store(StoreThread $request, Recaptcha $recaptcha)
     {
         $thread = Thread::create([
             'user_id' => auth()->id(),
@@ -56,16 +54,6 @@ class ThreadsController extends Controller
             'body' => $request->body,
             'slug' => $request->title,
         ]);
-
-        $response = Http::asForm()->post('https://www.google.com/recaptcha/api/siteverify', [
-            'secret' => config('services.recaptcha.secret'),
-            'response' => $request->input('g-recaptcha-response'),
-            'remoteip' => $_SERVER['REMOTE_ADDR'],
-        ]);
-
-        if (! $response->json()['success']) {
-            throw new Exception('Recaptcha failed... :(');
-        }
 
         if (request()->wantsJson()) {
             return response($thread, 201);

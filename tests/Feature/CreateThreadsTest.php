@@ -3,13 +3,26 @@
 namespace Tests\Feature;
 
 use App\Activity;
+use App\Rules\Recaptcha;
 use App\Thread;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Mockery;
 
 class CreateThreadsTest extends TestCase
 {
     use DatabaseMigrations;
+
+    public function setUp(): void
+    {
+        parent::setUp();
+
+        $m = Mockery::mock(Recaptcha::class);
+
+        $m->shouldReceive('passes')->andReturn(true);
+
+        app()->singleton(Recaptcha::class, $m);
+    }
 
     /** @test */
     public function test_guests_may_not_create_threads()
@@ -30,7 +43,9 @@ class CreateThreadsTest extends TestCase
 
         $thread = factory('App\Thread')->make();
 
-        $response = $this->post('/threads', $thread->toArray());
+        $response = $this->post('/threads', $thread->toArray() + [
+            'g-recaptcha-response' => 'token'
+        ]);
         
         $this->get($response->headers->get('Location'))
              ->assertSee($thread->title)
@@ -139,5 +154,14 @@ class CreateThreadsTest extends TestCase
         $this->post(route('threads'), $thread->toArray());
 
         $this->assertTrue(Thread::whereSlug('title-2')->exists());
+    }
+
+    /** @test */
+    public function test_a_thread_requires_recaptcha_verification()
+    {
+        unset(app()[Recaptcha::class]);
+
+        $this->publishThread(['g-recaptcha-response' => 'test'])
+             ->assertSessionHasErrors('g-recaptcha-response');
     }
 }
